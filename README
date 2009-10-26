@@ -1,0 +1,11 @@
+ofxOsc 0.4
+
+an addon for openFrameworks, allowing OpenSoundControl communication
+
+Copyright 2007-2009 Damian Stewart
+License: Modified BSD (see source code for license text)
+
+see http://www.frey.co.nz/ofxosc for more information
+
+- Damian
+damian@frey.co.nz
