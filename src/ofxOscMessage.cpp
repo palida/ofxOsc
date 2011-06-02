@@ -89,7 +89,7 @@ int32_t ofxOscMessage::getArgAsInt32( int index ) const
 	    if ( getArgType( index ) == OFXOSC_TYPE_FLOAT )
         {
             fprintf(stderr, "ofxOscMessage:getArgAsInt32: warning: converting int32 to float for argument %i\n", index );
-            return ((ofxOscArgFloat*)args[index])->get();
+            return (int32_t)((ofxOscArgFloat*)args[index])->get();
         }
         else
         {
@@ -109,7 +109,7 @@ float ofxOscMessage::getArgAsFloat( int index ) const
 	    if ( getArgType( index ) == OFXOSC_TYPE_INT32 )
         {
             fprintf(stderr, "ofxOscMessage:getArgAsFloat: warning: converting float to int32 for argument %i\n", index );
-            return ((ofxOscArgInt32*)args[index])->get();
+            return (int32_t)((ofxOscArgInt32*)args[index])->get();
         }
         else
         {
@@ -150,7 +150,29 @@ string ofxOscMessage::getArgAsString( int index ) const
         return ((ofxOscArgString*)args[index])->get();
 }
 
+unsigned char* ofxOscMessage::getArgAsBlob( int index ) const
+{
+	if ( getArgType(index) == OFXOSC_TYPE_BLOB )
+		return ((ofxOscArgBlob*)args[index])->get();
+	else
+	{
+		fprintf(stderr, "ofxOscMessage:getArgAsBlob: error: argument %i is not a blob\n", index );
+		return NULL;
+	}	
+	
+}
 
+uint32_t ofxOscMessage::getArgAsBlobSize( int index ) const
+{
+	if ( getArgType(index) == OFXOSC_TYPE_BLOB )
+		return ((ofxOscArgBlob*)args[index])->size();
+	else
+	{
+		fprintf(stderr, "ofxOscMessage:getArgAsBlob: error: argument %i is not a blob\n", index );
+		return NULL;
+	}	
+	
+}
 
 /*
 
@@ -175,6 +197,15 @@ void ofxOscMessage::addStringArg( string argument )
 	args.push_back( new ofxOscArgString( argument ) );
 }
 
+void ofxOscMessage::addBlobArg( unsigned char* argument, uint32_t size )
+{
+	args.push_back( new ofxOscArgBlob( argument, size ) );
+}
+
+void ofxOscMessage::addBlobArg( vector<uint8_t> argument )
+{
+	args.push_back( new ofxOscArgBlob( argument ) );
+}
 
 /*
 
@@ -200,6 +231,8 @@ ofxOscMessage& ofxOscMessage::copy( const ofxOscMessage& other )
 			args.push_back( new ofxOscArgFloat( other.getArgAsFloat( i ) ) );
 		else if ( argType == OFXOSC_TYPE_STRING )
 			args.push_back( new ofxOscArgString( other.getArgAsString( i ) ) );
+		else if ( argType == OFXOSC_TYPE_BLOB )
+			args.push_back( new ofxOscArgBlob( other.getArgAsBlob( i ), other.getArgAsBlobSize( i ) ) );
 		else
 		{
 			assert( false && "bad argument type" );

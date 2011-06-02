@@ -72,6 +72,8 @@ public:
 	int32_t getArgAsInt32( int index ) const;
 	float getArgAsFloat( int index ) const;
 	string getArgAsString( int index ) const;
+	unsigned char* getArgAsBlob( int index ) const;
+	uint32_t getArgAsBlobSize( int index ) const;
 
 	/// message construction
 	void setAddress( string _address ) { address = _address; };
@@ -80,6 +82,8 @@ public:
 	void addIntArg( int32_t argument );
 	void addFloatArg( float argument );
 	void addStringArg( string argument );
+	void addBlobArg( unsigned char* argument, uint32_t size );
+	void addBlobArg( vector<uint8_t> argument );
 
 
 private:

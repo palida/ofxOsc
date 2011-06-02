@@ -153,9 +153,18 @@ void ofxOscReceiver::ProcessMessage( const osc::ReceivedMessage &m, const IpEndp
 			ofMessage->addFloatArg( arg->AsFloatUnchecked() );
 		else if ( arg->IsString() )
 			ofMessage->addStringArg( arg->AsStringUnchecked() );
+		else if ( arg->IsBlob() )
+		{
+			const void* data;
+			unsigned long size;
+
+			arg->AsBlobUnchecked( data, size );
+			
+			ofMessage->addBlobArg( (unsigned char*)data, size );
+		}
 		else
 		{
-			assert( false && "message argument is not int, float, or string" );
+			assert( false && "message argument is not int, float, string, or blob" );
 		}
 	}
 

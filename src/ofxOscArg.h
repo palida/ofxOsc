@@ -132,4 +132,53 @@ private:
 	std::string value;
 };
 
+class ofxOscArgBlob : public ofxOscArg
+{
+public:
+	ofxOscArgBlob( unsigned char* data, size_t size )
+	{
+		bytes = size;
+		
+		blob = new unsigned char[bytes];
+		memcpy( blob, data, bytes );
+	}
+	ofxOscArgBlob( vector<uint8_t> data )
+	{
+		bytes = data.size();
+		blob = new unsigned char[bytes];
+		
+		for( int i = 0; i < data.size(); i++ )
+			blob[i] = data[i];
+	}
+	ofxOscArgBlob( const ofxOscArgBlob& src )
+	{
+		bytes = src.bytes;
+		blob = new unsigned char[bytes];
+		
+		memcpy( blob, src.blob, bytes );
+	}
+	~ofxOscArgBlob() { delete [] blob; }
+	
+	ofxOscArgType getType() { return OFXOSC_TYPE_BLOB; }
+	string getTypeName() { return "blob"; }
+	
+	unsigned char* get() const { return blob; }
+	void set( unsigned char* data, uint32_t n )
+	{
+		bytes = n;
+		
+		delete [] blob;
+		
+		blob = new unsigned char[bytes];
+		memcpy( blob, data, bytes );
+	}
+	
+	uint32_t size() const { return bytes; }
+
+private:
+	unsigned char* blob;
+	uint32_t bytes; // Number of bytes in blob
+	
+};
+
 #endif
