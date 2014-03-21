@@ -68,8 +68,9 @@ void ofxOscSender::sendBundle( ofxOscBundle& bundle )
 
 	// serialise the bundle
 	appendBundle( bundle, p );
-
-	socket->Send( p.Data(), p.Size() );
+	
+	if(socket)
+		socket->Send( p.Data(), p.Size() );
 }
 
 void ofxOscSender::sendMessage( ofxOscMessage& message )
@@ -83,7 +84,8 @@ void ofxOscSender::sendMessage( ofxOscMessage& message )
 	appendMessage( message, p );
 	p << osc::EndBundle;
 
-	socket->Send( p.Data(), p.Size() );
+	if(socket)
+		socket->Send( p.Data(), p.Size() );
 }
 
 void ofxOscSender::appendBundle( ofxOscBundle& bundle, osc::OutboundPacketStream& p )
